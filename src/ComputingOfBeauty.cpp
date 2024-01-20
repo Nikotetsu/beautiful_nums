@@ -21,12 +21,13 @@ ComputingOfBeauty::~ComputingOfBeauty(){
 unsigned int ComputingOfBeauty::sum_of_digits(unsigned int val){
     unsigned int sum{0};
     unsigned int base{this->get_base()};
+    unsigned int num_len{this->get_num_len()};
 
-    while (val>0){
+    for(auto d{0}; d<num_len; ++d){
         sum+=val%base;
         val=val/base;
     }
-    
+
     return sum;
 }
 
@@ -35,10 +36,10 @@ unsigned long long ComputingOfBeauty::count_num_of_beauties(){
     unsigned int base{this->get_base()};
     unsigned int num_len{this->get_num_len()};
 
-    unordered_map<unsigned int,unsigned int> counts_of_sums;
+    unordered_map<unsigned long,unsigned long> counts_of_sums;
 
     //count variants of sums of digits for half of number`s notation
-    for (auto i{0}; i < pow(base,(num_len/2)); i++){
+    for (auto i{pow(base,5)}; i < pow(base,(num_len/2)); i++){
         auto sum = this->sum_of_digits(i);
         ++counts_of_sums[sum];
     }
@@ -65,3 +66,31 @@ unsigned int ComputingOfBeauty::get_base(){
 unsigned int ComputingOfBeauty::get_num_len(){
     return this->f_num_len;
 }
+
+void ComputingOfBeauty::count_num_of_beauties_2(unsigned int base, unsigned int num_len){
+    vector<unsigned int> val;
+    unsigned int t{0};
+
+    for(unsigned int i{0}; i<pow(base,num_len); ++i){
+        val.erase(val.cbegin(), val.cend());
+        t = i;
+
+        for(auto d{0}; d<num_len; ++d){
+            if(t==0){
+                val.emplace(val.cbegin(),0);
+            }
+            else{
+                val.emplace(val.cbegin(),t%base);
+                t/=base;
+            }/*if else*/
+        }/*for d*/
+
+        for(unsigned int dig : val){
+            cout << dig;
+        }/*for dig*/
+
+        cout<<"\ni="<<i<<endl;
+    }/*for i*/
+    
+}/*void*/
+

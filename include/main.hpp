@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "ComputingOfBeauty.hpp"
 #include <cmath>
+#include <vector>
 
 using namespace std;
 
