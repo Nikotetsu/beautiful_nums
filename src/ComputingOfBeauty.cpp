@@ -23,9 +23,9 @@ unsigned int ComputingOfBeauty::sum_of_digits(unsigned int val){
     unsigned int base{this->get_base()};
     unsigned int num_len{this->get_num_len()};
 
-    for(auto d{0}; d<num_len; ++d){
+    for(auto d{0}; d<num_len/2; ++d){
         sum+=val%base;
-        val=val/base;
+        val/=base;
     }
 
     return sum;
@@ -39,7 +39,7 @@ unsigned long long ComputingOfBeauty::count_num_of_beauties(){
     unordered_map<unsigned long,unsigned long> counts_of_sums;
 
     //count variants of sums of digits for half of number`s notation
-    for (auto i{pow(base,5)}; i < pow(base,(num_len/2)); i++){
+    for (auto i{0}; i < pow(base,(num_len/2)); i++){
         auto sum = this->sum_of_digits(i);
         ++counts_of_sums[sum];
     }
@@ -68,29 +68,41 @@ unsigned int ComputingOfBeauty::get_num_len(){
 }
 
 void ComputingOfBeauty::count_num_of_beauties_2(unsigned int base, unsigned int num_len){
-    vector<unsigned int> val;
+    
+    unordered_map<unsigned long, unsigned long> counts_of_sums;
+    unsigned long sum{0};
+    unsigned long long count{0};
     unsigned int t{0};
 
-    for(unsigned int i{0}; i<pow(base,num_len); ++i){
-        val.erase(val.cbegin(), val.cend());
+    for(unsigned long i{0}; i<pow(base,num_len/2); ++i){
+        sum = 0;
         t = i;
 
-        for(auto d{0}; d<num_len; ++d){
+        for(auto d{0}; d<num_len/2; ++d){
             if(t==0){
-                val.emplace(val.cbegin(),0);
+                continue;
             }
             else{
-                val.emplace(val.cbegin(),t%base);
+                sum+=t%base;
                 t/=base;
             }/*if else*/
         }/*for d*/
+        ++counts_of_sums[sum];
 
-        for(unsigned int dig : val){
-            cout << dig;
-        }/*for dig*/
-
-        cout<<"\ni="<<i<<endl;
     }/*for i*/
     
+    cout << "Sum" << "\t" << "Count" << endl;
+    for(const auto& [sum, sc] : counts_of_sums){
+        cout << sum << "\t" << sc <<endl;
+        count+=pow(sc,2);
+    }
+
+    //if length of number is odd, have extra variants
+    if (num_len%2!=0){
+        count*=base;
+    }
+
+    cout<<"Amount of the beautiful numbers = " << count << endl;
+
 }/*void*/
 
